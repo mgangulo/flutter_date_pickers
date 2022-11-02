@@ -235,7 +235,10 @@ class _DayBasedChangeablePickerState<T>
             onNextMonthTapped:
                 state.isLastMonth ? null : _presenter.gotoNextMonth,
             title: Text(
-              state.curMonthDis,
+              (widget.datePickerStyles.monthHeaderTitleBuilder != null)
+                  ? widget.datePickerStyles
+                      .monthHeaderTitleBuilder!(state.currentMonth)
+                  : state.curMonthDis,
               key: widget.datePickerKeys?.selectedPeriodKeys,
               style: _resultStyles.displayedPeriodTitle,
             ),

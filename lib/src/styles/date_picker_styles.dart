@@ -10,6 +10,9 @@ typedef DayHeaderStyleBuilder = DayHeaderStyle? Function(int dayOfTheWeek);
 typedef DayHeaderTitleBuilder = String Function(
     int dayOfTheWeek, List<String> localizedWeekdayHeaders);
 
+/// Gets the calendar title to navigate
+typedef MonthHeaderTitleBuilder = String Function(DateTime dateTime);
+
 /// Common styles for date pickers.
 ///
 /// To define more styles for date pickers which allow select some range
@@ -68,27 +71,31 @@ class DatePickerStyles {
   /// Can be null. In this case value from current locale will be used.
   final int? firstDayOfeWeekIndex;
 
-  //Padding for title between arrows
-  //If null it will expand
+  /// Padding for title between arrows
+  /// If null it will expand
   final EdgeInsetsGeometry? paddingCalendarTitle;
 
+  /// Builder to customize the content of the calendar title
+  /// Where 0 points to Sunday and 6 points to Saturday.
+  final MonthHeaderTitleBuilder? monthHeaderTitleBuilder;
+
   /// Styles for date picker.
-  DatePickerStyles(
-      {this.displayedPeriodTitle,
-      this.currentDateStyle,
-      this.disabledDateStyle,
-      this.selectedDateStyle,
-      this.selectedSingleDateDecoration,
-      this.defaultDateTextStyle,
-      this.dayHeaderStyle,
-      this.dayHeaderStyleBuilder,
-      this.dayHeaderTitleBuilder,
-      this.firstDayOfeWeekIndex,
-      this.prevIcon = const Icon(Icons.chevron_left),
-      this.nextIcon = const Icon(Icons.chevron_right),
-      this.paddingCalendarTitle,
-      })
-      : assert(!(dayHeaderStyle != null && dayHeaderStyleBuilder != null),
+  DatePickerStyles({
+    this.displayedPeriodTitle,
+    this.currentDateStyle,
+    this.disabledDateStyle,
+    this.selectedDateStyle,
+    this.selectedSingleDateDecoration,
+    this.defaultDateTextStyle,
+    this.dayHeaderStyle,
+    this.dayHeaderStyleBuilder,
+    this.dayHeaderTitleBuilder,
+    this.firstDayOfeWeekIndex,
+    this.prevIcon = const Icon(Icons.chevron_left),
+    this.nextIcon = const Icon(Icons.chevron_right),
+    this.paddingCalendarTitle,
+    this.monthHeaderTitleBuilder,
+  })  : assert(!(dayHeaderStyle != null && dayHeaderStyleBuilder != null),
             "Should be only one from: dayHeaderStyleBuilder, dayHeaderStyle."),
         assert(
             dayHeaderStyleBuilder == null ||
@@ -293,40 +300,43 @@ class DatePickerRangeStyles extends DatePickerStyles {
 
   /// Styles for the pickers that allows to select range ([RangePicker],
   /// [WeekPicker]).
-  DatePickerRangeStyles({
-    TextStyle? displayedPeriodTitle,
-    TextStyle? currentDateStyle,
-    TextStyle? disabledDateStyle,
-    TextStyle? selectedDateStyle,
-    BoxDecoration? selectedSingleDateDecoration,
-    TextStyle? defaultDateTextStyle,
-    DayHeaderStyle? dayHeaderStyle,
-    DayHeaderStyleBuilder? dayHeaderStyleBuilder,
-    DayHeaderTitleBuilder? dayHeaderTitleBuilder,
-    Widget nextIcon = const Icon(Icons.chevron_right),
-    Widget prevIcon = const Icon(Icons.chevron_left),
-    int? firstDayOfWeekIndex,
-    this.selectedPeriodLastDecoration,
-    this.selectedPeriodMiddleDecoration,
-    this.selectedPeriodStartDecoration,
-    this.selectedPeriodStartTextStyle,
-    this.selectedPeriodMiddleTextStyle,
-    this.selectedPeriodEndTextStyle,
-    EdgeInsetsGeometry? paddingCalendarTitle,
-  }) : super(
-            displayedPeriodTitle: displayedPeriodTitle,
-            currentDateStyle: currentDateStyle,
-            disabledDateStyle: disabledDateStyle,
-            selectedDateStyle: selectedDateStyle,
-            selectedSingleDateDecoration: selectedSingleDateDecoration,
-            defaultDateTextStyle: defaultDateTextStyle,
-            dayHeaderStyle: dayHeaderStyle,
-            dayHeaderStyleBuilder: dayHeaderStyleBuilder,
-            dayHeaderTitleBuilder: dayHeaderTitleBuilder,
-            nextIcon: nextIcon,
-            prevIcon: prevIcon,
-            firstDayOfeWeekIndex: firstDayOfWeekIndex,
-            paddingCalendarTitle: paddingCalendarTitle);
+  DatePickerRangeStyles(
+      {TextStyle? displayedPeriodTitle,
+      TextStyle? currentDateStyle,
+      TextStyle? disabledDateStyle,
+      TextStyle? selectedDateStyle,
+      BoxDecoration? selectedSingleDateDecoration,
+      TextStyle? defaultDateTextStyle,
+      DayHeaderStyle? dayHeaderStyle,
+      DayHeaderStyleBuilder? dayHeaderStyleBuilder,
+      DayHeaderTitleBuilder? dayHeaderTitleBuilder,
+      Widget nextIcon = const Icon(Icons.chevron_right),
+      Widget prevIcon = const Icon(Icons.chevron_left),
+      int? firstDayOfWeekIndex,
+      this.selectedPeriodLastDecoration,
+      this.selectedPeriodMiddleDecoration,
+      this.selectedPeriodStartDecoration,
+      this.selectedPeriodStartTextStyle,
+      this.selectedPeriodMiddleTextStyle,
+      this.selectedPeriodEndTextStyle,
+      EdgeInsetsGeometry? paddingCalendarTitle,
+      MonthHeaderTitleBuilder? monthHeaderTitleBuilder})
+      : super(
+          displayedPeriodTitle: displayedPeriodTitle,
+          currentDateStyle: currentDateStyle,
+          disabledDateStyle: disabledDateStyle,
+          selectedDateStyle: selectedDateStyle,
+          selectedSingleDateDecoration: selectedSingleDateDecoration,
+          defaultDateTextStyle: defaultDateTextStyle,
+          dayHeaderStyle: dayHeaderStyle,
+          dayHeaderStyleBuilder: dayHeaderStyleBuilder,
+          dayHeaderTitleBuilder: dayHeaderTitleBuilder,
+          nextIcon: nextIcon,
+          prevIcon: prevIcon,
+          firstDayOfeWeekIndex: firstDayOfWeekIndex,
+          paddingCalendarTitle: paddingCalendarTitle,
+          monthHeaderTitleBuilder: monthHeaderTitleBuilder,
+        );
 
   @override
   bool operator ==(Object other) {
