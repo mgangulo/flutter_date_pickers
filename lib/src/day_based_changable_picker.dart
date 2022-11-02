@@ -225,6 +225,7 @@ class _DayBasedChangeablePickerState<T>
           DayBasedChangeablePickerState state = snapshot.data!;
 
           return MonthNavigationRow(
+            paddingCalendarTitle: widget.datePickerStyles.paddingCalendarTitle,
             previousPageIconKey: widget.datePickerKeys?.previousPageIconKey,
             nextPageIconKey: widget.datePickerKeys?.nextPageIconKey,
             previousMonthTooltip: state.prevTooltip,

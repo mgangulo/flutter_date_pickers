@@ -44,6 +44,10 @@ class MonthNavigationRow extends StatelessWidget {
   /// Usually [Text] widget.
   final Widget? title;
 
+  //Padding for title between arrows
+  //If null it will expand
+  final EdgeInsetsGeometry? paddingCalendarTitle;
+
   /// Creates month navigation row.
   const MonthNavigationRow({
     Key? key,
@@ -55,7 +59,8 @@ class MonthNavigationRow extends StatelessWidget {
     this.previousMonthTooltip,
     this.title,
     required this.nextIcon,
-    required this.prevIcon
+    required this.prevIcon,
+    this.paddingCalendarTitle,
   }) : super(key: key);
 
   @override
@@ -64,6 +69,7 @@ class MonthNavigationRow extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Semantics(
           sortKey: MonthPickerSortKey.previousMonth,
@@ -74,16 +80,30 @@ class MonthNavigationRow extends StatelessWidget {
             onTap: onPreviousMonthTapped,
           ),
         ),
-        Expanded(
-          child: Container(
-            alignment: Alignment.center,
-            child: Center(
-              child: ExcludeSemantics(
-                child: title,
+        if (paddingCalendarTitle != null) ...[
+          Padding(
+            padding: paddingCalendarTitle!,
+            child: Container(
+              alignment: Alignment.center,
+              child: Center(
+                child: ExcludeSemantics(
+                  child: title,
+                ),
               ),
             ),
           ),
-        ),
+        ] else ...[
+          Expanded(
+            child: Container(
+              alignment: Alignment.center,
+              child: Center(
+                child: ExcludeSemantics(
+                  child: title,
+                ),
+              ),
+            ),
+          ),
+        ],
         Semantics(
           sortKey: MonthPickerSortKey.nextMonth,
           child: IconBtn(

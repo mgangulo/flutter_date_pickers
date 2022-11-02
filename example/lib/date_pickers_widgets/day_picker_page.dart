@@ -50,6 +50,7 @@ class _DayPickerPageState extends State<DayPickerPage> {
         color: selectedSingleDateDecorationColor,
         shape: BoxShape.circle,
       ),
+      paddingCalendarTitle: EdgeInsets.symmetric(horizontal: 16),
       dayHeaderStyle: DayHeaderStyle(
         textStyle: TextStyle(
           color: Colors.red,

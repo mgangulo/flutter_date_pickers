@@ -68,6 +68,10 @@ class DatePickerStyles {
   /// Can be null. In this case value from current locale will be used.
   final int? firstDayOfeWeekIndex;
 
+  //Padding for title between arrows
+  //If null it will expand
+  final EdgeInsetsGeometry? paddingCalendarTitle;
+
   /// Styles for date picker.
   DatePickerStyles(
       {this.displayedPeriodTitle,
@@ -81,7 +85,9 @@ class DatePickerStyles {
       this.dayHeaderTitleBuilder,
       this.firstDayOfeWeekIndex,
       this.prevIcon = const Icon(Icons.chevron_left),
-      this.nextIcon = const Icon(Icons.chevron_right)})
+      this.nextIcon = const Icon(Icons.chevron_right),
+      this.paddingCalendarTitle,
+      })
       : assert(!(dayHeaderStyle != null && dayHeaderStyleBuilder != null),
             "Should be only one from: dayHeaderStyleBuilder, dayHeaderStyle."),
         assert(
@@ -306,6 +312,7 @@ class DatePickerRangeStyles extends DatePickerStyles {
     this.selectedPeriodStartTextStyle,
     this.selectedPeriodMiddleTextStyle,
     this.selectedPeriodEndTextStyle,
+    EdgeInsetsGeometry? paddingCalendarTitle,
   }) : super(
             displayedPeriodTitle: displayedPeriodTitle,
             currentDateStyle: currentDateStyle,
@@ -318,7 +325,8 @@ class DatePickerRangeStyles extends DatePickerStyles {
             dayHeaderTitleBuilder: dayHeaderTitleBuilder,
             nextIcon: nextIcon,
             prevIcon: prevIcon,
-            firstDayOfeWeekIndex: firstDayOfWeekIndex);
+            firstDayOfeWeekIndex: firstDayOfWeekIndex,
+            paddingCalendarTitle: paddingCalendarTitle);
 
   @override
   bool operator ==(Object other) {
