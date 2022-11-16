@@ -54,6 +54,8 @@ class _DaysPickerPageState extends State<DaysPickerPage> {
             .textTheme
             .bodyText1
             ?.copyWith(color: selectedDateStyleColor),
+        monthHeaderTitleBuilder: _monthHeaderTitleBuilder,
+        paddingCalendarTitle: EdgeInsets.zero,
         selectedSingleDateDecoration: BoxDecoration(
             color: selectedSingleDateDecorationColor, shape: BoxShape.circle));
 
@@ -178,4 +180,8 @@ class _DaysPickerPageState extends State<DaysPickerPage> {
         ? dp.EventDecoration(boxDecoration: roundedBorder)
         : null;
   }
+
+  String _monthHeaderTitleBuilder(DateTime dateTime) =>
+      "Hola "+dateTime.month.toString();
+
 }

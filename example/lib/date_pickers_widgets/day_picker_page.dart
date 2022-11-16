@@ -50,7 +50,8 @@ class _DayPickerPageState extends State<DayPickerPage> {
         color: selectedSingleDateDecorationColor,
         shape: BoxShape.circle,
       ),
-      paddingCalendarTitle: EdgeInsets.symmetric(horizontal: 16),
+      monthHeaderTitleBuilder: _monthHeaderTitleBuilder,
+      paddingCalendarTitle: EdgeInsets.zero,
       dayHeaderStyle: DayHeaderStyle(
         textStyle: TextStyle(
           color: Colors.red,
@@ -186,3 +187,6 @@ class _DayPickerPageState extends State<DayPickerPage> {
 String _dayHeaderTitleBuilder(
         int dayOfTheWeek, List<String> localizedHeaders) =>
     localizedHeaders[dayOfTheWeek].substring(0, 3);
+
+String _monthHeaderTitleBuilder(DateTime dateTime) =>
+    "Hola "+dateTime.month.toString();

@@ -24,7 +24,7 @@ class DayPicker<T extends Object> extends StatelessWidget {
       this.datePickerKeys,
       this.selectableDayPredicate,
       this.eventDecorationBuilder,
-      this.onMonthChanged})
+      this.onMonthChanged,})
       : super(key: key);
 
   /// Creates a day picker where only one single day can be selected.
