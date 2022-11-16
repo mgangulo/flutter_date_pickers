@@ -26,7 +26,7 @@ class DayBasedChangeablePicker<T> extends StatefulWidget {
   /// The currently selected date.
   ///
   /// This date is highlighted in the picker.
-  final DayPickerSelection selection;
+  final DayPickerSelection? selection;
 
   /// Called when the user picks a new T.
   final ValueChanged<T> onChanged;
@@ -69,7 +69,7 @@ class DayBasedChangeablePicker<T> extends StatefulWidget {
   /// Create picker with option to change month.
   DayBasedChangeablePicker({
     Key? key,
-    required this.selection,
+    this.selection,
     required this.onChanged,
     required this.firstDate,
     required this.lastDate,
@@ -364,10 +364,10 @@ class _DayBasedChangeablePickerState<T>
 
 DateTime _getInitiallyShownDate(
   DateTime? initiallyShowDate,
-  DayPickerSelection selection,
+  DayPickerSelection? selection,
 ) {
   if (initiallyShowDate != null) return initiallyShowDate;
-  if (selection.isNotEmpty) return selection.earliest;
+  if (selection!=null && selection.isNotEmpty) return selection!.earliest!;
   return DateTime.now();
 }
 

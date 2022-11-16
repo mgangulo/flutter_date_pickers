@@ -66,7 +66,9 @@ abstract class ISelectablePicker<T> {
   /// If [_selectableDayPredicate] is set checks it as well.
   @protected
   bool isDisabled(DateTime day) =>
-    day.isAfter(lastDate) || day.isBefore(firstDate) || !_selectableDayPredicate(day);
+      day.isAfter(lastDate) ||
+      day.isBefore(firstDate) ||
+      !_selectableDayPredicate(day);
 
   /// Closes [onUpdateController].
   /// After it [onUpdateController] can't get new events.
@@ -369,7 +371,7 @@ class RangeSelectable extends ISelectablePicker<DatePeriod> {
   ///
   /// [selectedPeriod.start] time is midnight.
   /// [selectedPeriod.end] time is millisecond before next day midnight.
-  DatePeriod selectedPeriod;
+  DatePeriod? selectedPeriod;
 
   /// If [selectedPeriod] has dates unavailable to select.
   late bool _selectedPeriodIsBroken;
@@ -389,12 +391,12 @@ class RangeSelectable extends ISelectablePicker<DatePeriod> {
   /// [selectableDayPredicate] nothing will be returned as selection
   /// but [UnselectablePeriodException] will be thrown.
   RangeSelectable(
-      DatePeriod selectedPeriod, DateTime firstDate, DateTime lastDate,
+      DatePeriod? selectedPeriod, DateTime firstDate, DateTime lastDate,
       {SelectableDayPredicate? selectableDayPredicate})
-      : selectedPeriod = DatePeriod(
+      : selectedPeriod = selectedPeriod!=null? DatePeriod(
           DatePickerUtils.startOfTheDay(selectedPeriod.start),
           DatePickerUtils.endOfTheDay(selectedPeriod.end),
-        ),
+        ) : null,
         super(firstDate, lastDate,
             selectableDayPredicate: selectableDayPredicate) {
     _selectedPeriodIsBroken = _disabledDatesInPeriod(selectedPeriod).isNotEmpty;
@@ -406,14 +408,16 @@ class RangeSelectable extends ISelectablePicker<DatePeriod> {
 
     if (isDisabled(date)) {
       result = DayType.disabled;
-    } else if (_isDaySelected(date) && !_selectedPeriodIsBroken) {
-      if (DatePickerUtils.sameDate(date, selectedPeriod.start) &&
-          DatePickerUtils.sameDate(date, selectedPeriod.end)) {
+    } else if (_isDaySelected(date) &&
+        !_selectedPeriodIsBroken &&
+        selectedPeriod != null) {
+      if (DatePickerUtils.sameDate(date, selectedPeriod!.start) &&
+          DatePickerUtils.sameDate(date, selectedPeriod!.end)) {
         result = DayType.single;
-      } else if (DatePickerUtils.sameDate(date, selectedPeriod.start) ||
+      } else if (DatePickerUtils.sameDate(date, selectedPeriod!.start) ||
           DatePickerUtils.sameDate(date, firstDate)) {
         result = DayType.start;
-      } else if (DatePickerUtils.sameDate(date, selectedPeriod.end) ||
+      } else if (DatePickerUtils.sameDate(date, selectedPeriod!.end) ||
           DatePickerUtils.sameDate(date, lastDate)) {
         result = DayType.end;
       } else {
@@ -444,8 +448,9 @@ class RangeSelectable extends ISelectablePicker<DatePeriod> {
   // Returns new selected period according to tapped date.
   DatePeriod _getNewSelectedPeriod(DateTime tappedDate) {
     // check if was selected only one date and we should generate period
-    bool sameDate =
-        DatePickerUtils.sameDate(selectedPeriod.start, selectedPeriod.end);
+    bool sameDate = (selectedPeriod != null)
+        ? DatePickerUtils.sameDate(selectedPeriod!.start, selectedPeriod!.end)
+        : false;
     DatePeriod newPeriod;
 
     // Was selected one-day-period.
@@ -453,7 +458,7 @@ class RangeSelectable extends ISelectablePicker<DatePeriod> {
     if (sameDate) {
       // if user tap on the already selected single day
       bool selectedAlreadySelectedDay =
-          DatePickerUtils.sameDate(tappedDate, selectedPeriod.end);
+          DatePickerUtils.sameDate(tappedDate, selectedPeriod!.end);
       bool isSelectedFirstDay = DatePickerUtils.sameDate(tappedDate, firstDate);
       bool isSelectedLastDay = DatePickerUtils.sameDate(tappedDate, lastDate);
 
@@ -472,17 +477,17 @@ class RangeSelectable extends ISelectablePicker<DatePeriod> {
         }
       } else {
         DateTime startOfTheSelectedDay =
-            DatePickerUtils.startOfTheDay(selectedPeriod.start);
+            DatePickerUtils.startOfTheDay(selectedPeriod!.start);
 
         if (!tappedDate.isAfter(startOfTheSelectedDay)) {
           newPeriod = DatePickerUtils.sameDate(tappedDate, firstDate)
-              ? DatePeriod(firstDate, selectedPeriod.end)
+              ? DatePeriod(firstDate, selectedPeriod!.end)
               : DatePeriod(DatePickerUtils.startOfTheDay(tappedDate),
-                  selectedPeriod.end);
+                  selectedPeriod!.end);
         } else {
           newPeriod = DatePickerUtils.sameDate(tappedDate, lastDate)
-              ? DatePeriod(selectedPeriod.start, lastDate)
-              : DatePeriod(selectedPeriod.start,
+              ? DatePeriod(selectedPeriod!.start, lastDate)
+              : DatePeriod(selectedPeriod!.start,
                   DatePickerUtils.endOfTheDay(tappedDate));
         }
       }
@@ -519,26 +524,29 @@ class RangeSelectable extends ISelectablePicker<DatePeriod> {
     return selectedPeriodIsBroken;
   }
 
-  List<DateTime> _disabledDatesInPeriod(DatePeriod period) {
+  List<DateTime> _disabledDatesInPeriod(DatePeriod? period) {
     List<DateTime> result = <DateTime>[];
+    if (period!=null) {
+      var date = period.start;
 
-    var date = period.start;
+      while (!date.isAfter(period.end)) {
+        if (isDisabled(date)) result.add(date);
 
-    while (!date.isAfter(period.end)) {
-      if (isDisabled(date)) result.add(date);
-
-      date = date.add(Duration(days: 1));
+        date = date.add(Duration(days: 1));
+      }
     }
-
     return result;
   }
 
   bool _isDaySelected(DateTime date) {
-    DateTime startOfTheStartDay = selectedPeriod.start;
-    DateTime endOfTheLastDay = selectedPeriod.end;
+    if (selectedPeriod!=null) {
+      DateTime startOfTheStartDay = selectedPeriod!.start;
+      DateTime endOfTheLastDay = selectedPeriod!.end;
 
-    return !(date.isBefore(startOfTheStartDay) ||
-        date.isAfter(endOfTheLastDay));
+      return !(date.isBefore(startOfTheStartDay) ||
+          date.isAfter(endOfTheLastDay));
+    }
+    return false;
   }
 }
 

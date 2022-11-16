@@ -17,7 +17,7 @@ class RangePicker extends StatelessWidget {
   /// Creates a range picker.
   RangePicker({
     Key? key,
-    required DatePeriod selectedPeriod,
+    DatePeriod? selectedPeriod,
     required DateTime firstDate,
     required DateTime lastDate,
     required this.onChanged,
@@ -31,17 +31,17 @@ class RangePicker extends StatelessWidget {
     this.onMonthChanged,
   })  : firstDate = DatePickerUtils.startOfTheDay(firstDate),
         lastDate = DatePickerUtils.endOfTheDay(lastDate),
-        selectedPeriod = DatePeriod(
-            DatePickerUtils.startOfTheDay(selectedPeriod.start),
-            DatePickerUtils.endOfTheDay(selectedPeriod.end)),
+        selectedPeriod = selectedPeriod!=null? DatePeriod(
+            DatePickerUtils.startOfTheDay(selectedPeriod!.start),
+            DatePickerUtils.endOfTheDay(selectedPeriod!.end)) : null,
         initiallyShowDate = initiallyShowDate == null
             ? null
             : DatePickerUtils.startOfTheDay(initiallyShowDate),
         super(key: key) {
     assert(!this.firstDate.isAfter(this.lastDate));
     assert(!this.lastDate.isBefore(this.firstDate));
-    assert(!this.selectedPeriod.start.isBefore(this.firstDate));
-    assert(!this.selectedPeriod.end.isAfter(this.lastDate));
+    assert(!(this.selectedPeriod?.start.isBefore(this.firstDate) ?? false));
+    assert(!(this.selectedPeriod?.end.isAfter(this.lastDate) ?? false));
     assert(this.initiallyShowDate == null ||
         !this.initiallyShowDate!.isAfter(this.lastDate));
     assert(this.initiallyShowDate == null ||
@@ -51,7 +51,7 @@ class RangePicker extends StatelessWidget {
   /// The currently selected period.
   ///
   /// This date is highlighted in the picker.
-  final DatePeriod selectedPeriod;
+  final DatePeriod? selectedPeriod;
 
   /// Called when the user picks a week.
   final ValueChanged<DatePeriod> onChanged;

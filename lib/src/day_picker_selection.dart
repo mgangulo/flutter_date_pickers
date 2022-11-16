@@ -10,7 +10,7 @@ abstract class DayPickerSelection {
   bool isAfter(DateTime dateTime);
 
   /// Returns earliest [DateTime] in this selection.
-  DateTime get earliest;
+  DateTime? get earliest;
 
   /// If this selection is empty.
   bool get isEmpty;
@@ -41,7 +41,7 @@ class DayPickerSingleSelection extends DayPickerSelection {
   bool isBefore(DateTime dateTime) => selectedDate.isBefore(dateTime);
 
   @override
-  DateTime get earliest => selectedDate;
+  DateTime? get earliest => selectedDate;
 
   @override
   bool get isEmpty => false;
@@ -71,7 +71,7 @@ class DayPickerMultiSelection extends DayPickerSelection {
       selectedDates.every((d) => d.isBefore(dateTime));
 
   @override
-  DateTime get earliest => DatePickerUtils.getEarliestFromList(selectedDates);
+  DateTime? get earliest => DatePickerUtils.getEarliestFromList(selectedDates);
 
   @override
   bool get isEmpty => selectedDates.isEmpty;
@@ -87,23 +87,25 @@ class DayPickerMultiSelection extends DayPickerSelection {
 /// * [DayPickerMultiSelection] - selection with one or many single dates.
 class DayPickerRangeSelection extends DayPickerSelection {
   /// Selected period.
-  final DatePeriod selectedRange;
+  final DatePeriod? selectedRange;
 
   /// Date period selection.
   const DayPickerRangeSelection(this.selectedRange);
 
   @override
-  DateTime get earliest => selectedRange.start;
+  DateTime? get earliest => selectedRange?.start;
 
   @override
-  bool isAfter(DateTime dateTime) => selectedRange.start.isAfter(dateTime);
+  bool isAfter(DateTime dateTime) =>
+      selectedRange?.start.isAfter(dateTime) ?? false;
 
   @override
-  bool isBefore(DateTime dateTime) => selectedRange.end.isBefore(dateTime);
+  bool isBefore(DateTime dateTime) =>
+      selectedRange?.end.isBefore(dateTime) ?? false;
 
   @override
-  bool get isEmpty => false;
+  bool get isEmpty => (selectedRange == null);
 
   @override
-  bool get isNotEmpty => true;
+  bool get isNotEmpty => (selectedRange != null);
 }

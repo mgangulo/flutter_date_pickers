@@ -21,9 +21,7 @@ class _RangePickerPageState extends State<RangePickerPage> {
   final DateTime _firstDate = DateTime.now().subtract(Duration(days: 3450));
   final DateTime _lastDate = DateTime.now().add(Duration(days: 345));
 
-  DatePeriod _selectedPeriod = DatePeriod(
-      DateTime.now().subtract(Duration(days: 350)),
-      DateTime.now().subtract(Duration(days: 12)));
+  DatePeriod? _selectedPeriod;
 
   Color selectedPeriodStartColor = Colors.blue;
   Color selectedPeriodLastColor = Colors.blue;
@@ -112,8 +110,8 @@ class _RangePickerPageState extends State<RangePickerPage> {
               padding: const EdgeInsets.only(top: 8.0, bottom: 4.0),
               child: Text("Selected period boundaries:"),
             ),
-            Text(_selectedPeriod.start.toString()),
-            Text(_selectedPeriod.end.toString()),
+            Text(_selectedPeriod?.start.toString() ?? ""),
+            Text(_selectedPeriod?.end.toString()?? ""),
           ]),
         ],
       );
@@ -233,7 +231,7 @@ class _RangePickerPageState extends State<RangePickerPage> {
     DatePeriod errorPeriod = exception.period;
 
     // If user supposed to set another start of the period.
-    bool selectStart = _selectedPeriod.start != errorPeriod.start;
+    bool selectStart = _selectedPeriod?.start != errorPeriod.start;
 
     DateTime newSelection = selectStart ? errorPeriod.start : errorPeriod.end;
 
