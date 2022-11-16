@@ -344,6 +344,12 @@ class _DayCell extends StatelessWidget {
         ),
       ),
     );
+    DayType dayType2 = dayType;
+    String dia = localizations.formatDecimal(day.day);
+    if ((dayType == DayType.start || dayType == DayType.end) &&
+        datePickerStyles.useMiddleColorAsBackgroundBorderDates) {
+      dayWidget = _useMiddleBackground(dayWidget, dayType);
+    }
 
     return dayWidget;
   }
@@ -376,8 +382,29 @@ class _DayCell extends StatelessWidget {
     } else {
       result = datePickerStyles.selectedPeriodMiddleTextStyle;
     }
-
     return result;
+  }
+
+  Widget _useMiddleBackground(Widget child, DayType dayType) {
+    if (datePickerStyles.selectedPeriodMiddleDecoration?.color != null) {
+      Color color = datePickerStyles.selectedPeriodMiddleDecoration!.color!;
+      List<Color> colors = dayType == DayType.start
+          ? [Colors.transparent, Colors.transparent, color]
+          : [color, color, Colors.transparent];
+      return Container(
+        decoration: BoxDecoration(
+          color: datePickerStyles.selectedPeriodMiddleDecoration?.color,
+          gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: colors,
+              stops: [0, 0.5, 0.5]),
+        ),
+        child: child,
+      );
+    } else {
+      return child;
+    }
   }
 }
 

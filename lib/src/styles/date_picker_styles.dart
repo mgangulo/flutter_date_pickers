@@ -236,6 +236,10 @@ class DatePickerRangeStyles extends DatePickerStyles {
   /// If null - default [DatePickerStyles.selectedDateStyle] will be used.
   final TextStyle? selectedPeriodMiddleTextStyle;
 
+  /// Uses middle color as bacjground of start and end date, but still uses
+  /// their respective box decorations.
+  final bool useMiddleColorAsBackgroundBorderDates;
+
   /// Return new [DatePickerRangeStyles] object
   /// where fields with null values set with defaults from given theme.
   @override
@@ -295,33 +299,36 @@ class DatePickerRangeStyles extends DatePickerStyles {
       selectedPeriodStartTextStyle: _selectedPeriodStartTextStyle,
       selectedPeriodMiddleTextStyle: _selectedPeriodMiddleTextStyle,
       selectedPeriodEndTextStyle: _selectedPeriodEndTextStyle,
+      useMiddleColorAsBackgroundBorderDates:
+          useMiddleColorAsBackgroundBorderDates,
     );
   }
 
   /// Styles for the pickers that allows to select range ([RangePicker],
   /// [WeekPicker]).
-  DatePickerRangeStyles(
-      {TextStyle? displayedPeriodTitle,
-      TextStyle? currentDateStyle,
-      TextStyle? disabledDateStyle,
-      TextStyle? selectedDateStyle,
-      BoxDecoration? selectedSingleDateDecoration,
-      TextStyle? defaultDateTextStyle,
-      DayHeaderStyle? dayHeaderStyle,
-      DayHeaderStyleBuilder? dayHeaderStyleBuilder,
-      DayHeaderTitleBuilder? dayHeaderTitleBuilder,
-      Widget nextIcon = const Icon(Icons.chevron_right),
-      Widget prevIcon = const Icon(Icons.chevron_left),
-      int? firstDayOfWeekIndex,
-      this.selectedPeriodLastDecoration,
-      this.selectedPeriodMiddleDecoration,
-      this.selectedPeriodStartDecoration,
-      this.selectedPeriodStartTextStyle,
-      this.selectedPeriodMiddleTextStyle,
-      this.selectedPeriodEndTextStyle,
-      EdgeInsetsGeometry? paddingCalendarTitle,
-      MonthHeaderTitleBuilder? monthHeaderTitleBuilder})
-      : super(
+  DatePickerRangeStyles({
+    TextStyle? displayedPeriodTitle,
+    TextStyle? currentDateStyle,
+    TextStyle? disabledDateStyle,
+    TextStyle? selectedDateStyle,
+    BoxDecoration? selectedSingleDateDecoration,
+    TextStyle? defaultDateTextStyle,
+    DayHeaderStyle? dayHeaderStyle,
+    DayHeaderStyleBuilder? dayHeaderStyleBuilder,
+    DayHeaderTitleBuilder? dayHeaderTitleBuilder,
+    Widget nextIcon = const Icon(Icons.chevron_right),
+    Widget prevIcon = const Icon(Icons.chevron_left),
+    int? firstDayOfWeekIndex,
+    this.selectedPeriodLastDecoration,
+    this.selectedPeriodMiddleDecoration,
+    this.selectedPeriodStartDecoration,
+    this.selectedPeriodStartTextStyle,
+    this.selectedPeriodMiddleTextStyle,
+    this.selectedPeriodEndTextStyle,
+    EdgeInsetsGeometry? paddingCalendarTitle,
+    MonthHeaderTitleBuilder? monthHeaderTitleBuilder,
+    this.useMiddleColorAsBackgroundBorderDates = false,
+  }) : super(
           displayedPeriodTitle: displayedPeriodTitle,
           currentDateStyle: currentDateStyle,
           disabledDateStyle: disabledDateStyle,

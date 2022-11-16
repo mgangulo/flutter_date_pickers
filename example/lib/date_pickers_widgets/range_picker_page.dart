@@ -18,7 +18,6 @@ class RangePickerPage extends StatefulWidget {
 }
 
 class _RangePickerPageState extends State<RangePickerPage> {
-
   final DateTime _firstDate = DateTime.now().subtract(Duration(days: 3450));
   final DateTime _lastDate = DateTime.now().add(Duration(days: 345));
 
@@ -44,20 +43,24 @@ class _RangePickerPageState extends State<RangePickerPage> {
     // add selected colors to default settings
     DatePickerRangeStyles styles = DatePickerRangeStyles(
         selectedPeriodLastDecoration: BoxDecoration(
-            color: selectedPeriodLastColor,
-            borderRadius: const BorderRadiusDirectional.only(
-                topEnd: Radius.circular(24.0),
-                bottomEnd: Radius.circular(24.0))),
+          color: selectedPeriodLastColor,
+          shape: BoxShape.circle,
+        ),
+        selectedSingleDateDecoration: BoxDecoration(
+          color: selectedPeriodStartColor,
+          shape: BoxShape.circle,
+        ),
         selectedPeriodStartDecoration: BoxDecoration(
           color: selectedPeriodStartColor,
-          borderRadius: const BorderRadiusDirectional.only(
-              topStart: Radius.circular(24.0),
-              bottomStart: Radius.circular(24.0)),
+          shape: BoxShape.circle,
         ),
+        monthHeaderTitleBuilder: _monthHeaderTitleBuilder,
+        paddingCalendarTitle: EdgeInsets.zero,
         selectedPeriodMiddleDecoration: BoxDecoration(
             color: selectedPeriodMiddleColor, shape: BoxShape.rectangle),
         nextIcon: const Icon(Icons.arrow_right),
         prevIcon: const Icon(Icons.arrow_left),
+        useMiddleColorAsBackgroundBorderDates: true,
         dayHeaderStyleBuilder: _dayHeaderStyleBuilder);
 
     return Flex(
@@ -248,6 +251,9 @@ class _RangePickerPageState extends State<RangePickerPage> {
     return DayHeaderStyle(
         textStyle: TextStyle(color: isWeekend ? Colors.red : Colors.teal));
   }
+
+  String _monthHeaderTitleBuilder(DateTime dateTime) =>
+      "Hola " + dateTime.month.toString();
 }
 
 /// Only check the date part and not the time
